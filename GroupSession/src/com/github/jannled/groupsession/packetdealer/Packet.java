@@ -3,7 +3,6 @@ package com.github.jannled.groupsession.packetdealer;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.nio.ByteBuffer;
-import java.util.Arrays;
 import java.util.zip.CRC32;
 import java.util.zip.Checksum;
 
@@ -38,6 +37,7 @@ public class Packet
 	public Packet(Connection connection, byte[] data, int index)
 	{
 		this.connection = connection;
+		this.packet = null;
 		this.data = data;
 		checksum = calculateChecksum(data);
 	}
@@ -47,21 +47,29 @@ public class Packet
 	 * @param connection Where the packet came from
 	 * @param data In the data the header should already be included
 	 */
-	public Packet(Connection connection, byte[] data)
+	public Packet(Connection connection, DatagramPacket packet)
 	{
 		this.connection = connection;
-		recieve(connection, data);
+		this.packet = packet;
+		recieve(connection, packet.getData());
 	}
 	
 	private void recieve(Connection connection, byte[] packetBytes)
 	{
+		data = new byte[Config.packetSize];
+		
 		meta = packetBytes[0];
 		
 		index = ByteBuffer.wrap(packetBytes, 1, 4).getInt();
 		
-		checksum = ByteBuffer.wrap(packetBytes, 5, 13).getLong();
+		checksum = ByteBuffer.wrap(packetBytes, 5, 12).getLong();
 		
-		Print.m(Arrays.toString(packetBytes));
+		int pos = 0;
+		for(int i=Config.headerSize; i<packetBytes.length; i++)
+		{
+			data[pos] = packetBytes[i-1];
+			pos++;
+		}
 	}
 	
 	public void send()
@@ -74,12 +82,14 @@ public class Packet
 		for(int i = 0; i < 4; ++i) 
 		{
 			offset++;
-			packetBytes[offset + i] = (byte) (index >> (4 - i - 1 << 3));
+			packetBytes[offset] = (byte) (index >> (4 - i - 1 << 3));
 		}
+		
 		
 		for(int i = 0; i < 8; ++i) 
 		{
-			packetBytes[offset + i] = (byte) (checksum >> (8 - i - 1 << 3));
+			offset++;
+			packetBytes[offset] = (byte) (checksum >> (8 - i - 1 << 3));
 		}
 		
 		for(int i=0; i<data.length; i++)
@@ -87,11 +97,10 @@ public class Packet
 			packetBytes[offset + i] = data[i];
 		}
 		
-		Print.m(Arrays.toString(packetBytes));
-		
 		try
 		{
-			connection.getSocket().send(new DatagramPacket(packetBytes, packetBytes.length));
+			DatagramPacket packet = new DatagramPacket(packetBytes, packetBytes.length, connection.getAddress(), connection.getPort());
+			connection.getSocket().send(packet);
 		} catch (IOException e)
 		{
 			Print.e("IOException while creating packets!");

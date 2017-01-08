@@ -1,11 +1,13 @@
 package com.github.jannled.groupsession.packetdealer;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
+
+import com.github.jannled.lib.ThreadUtils;
 
 public class PacketSender implements Runnable
 {
 	private boolean running = true;
-	ArrayList<Packet> packetQue = new ArrayList<Packet>();
+	LinkedList<Packet> packetQue = new LinkedList<Packet>();
 	
 	public PacketSender()
 	{
@@ -20,11 +22,13 @@ public class PacketSender implements Runnable
 	@Override
 	public void run()
 	{
+		ThreadUtils.freeze(3000);
 		while(running)
 		{
-			for(Packet p : packetQue)
+			if(!packetQue.isEmpty())
 			{
-				p.send();
+				packetQue.getFirst().send();
+				packetQue.removeFirst();
 			}
 		}
 	}

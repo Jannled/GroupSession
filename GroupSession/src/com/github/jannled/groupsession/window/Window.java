@@ -4,7 +4,6 @@ import javax.swing.JFrame;
 
 public class Window
 {
-
 	private JFrame window;
 
 	/**
@@ -21,8 +20,10 @@ public class Window
 	private void initialize()
 	{
 		window = new JFrame();
+		window.setTitle("Group Session");
 		window.setBounds(100, 100, 450, 300);
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		window.setVisible(true);
 	}
 
 }

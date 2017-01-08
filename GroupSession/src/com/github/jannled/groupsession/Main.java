@@ -18,20 +18,20 @@ public class Main
 	public Main()
 	{
 		main = this;
+		openWindow();
 		connections = new ConnectionManager();
 		Connection c = null;
-		openWindow();
 		try
 		{
 			c = new Connection(InetAddress.getByName("127.0.0.1"), (short) 2369);
-			connections.addConnection(c);
 		} catch (UnknownHostException e)
 		{
 			e.printStackTrace();
 			return;
 		}
-		byte[] bytes = "Hallo Welt".getBytes();
-		Packet packet = new Packet(c, bytes);
+		connections.addConnection(c);
+		byte[] bytes = "Hallo Welt foo bar".getBytes();
+		Packet packet = new Packet(c, bytes, 131);
 		connections.getPacketSender().addPacket(packet);
 	}
 

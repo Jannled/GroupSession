@@ -13,6 +13,10 @@ import com.github.jannled.lib.Print;
 public class Connection
 {
 	DatagramSocket socket;
+	
+	InetAddress adress;
+	short port;
+	
 	int incomingIndex = 0;
 	int outgoingIndex = 0;
 	
@@ -20,22 +24,24 @@ public class Connection
 	{
 		try
 		{
-			setConnection(new DatagramSocket());
+			socket = new DatagramSocket();
+			setConnection("127.0.0.1", (short) 2369);
 		} catch (SocketException e)
 		{
-			Print.m("NOTE: Standard Socket used for connection");
 			e.printStackTrace();
 		}
 	}
 	
 	public Connection(InetAddress adress, short port)
 	{
-		setConnection(adress, port);
-	}
-	
-	public Connection(DatagramSocket socket)
-	{
-		this.socket = socket;
+		try
+		{
+			socket = new DatagramSocket();
+			setConnection(adress, port);
+		} catch (SocketException e)
+		{
+			e.printStackTrace();
+		}
 	}
 	
 	public void sendPacket(Packet packet)
@@ -47,41 +53,28 @@ public class Connection
 			
 		} catch (IOException e)
 		{
-			Print.e("IOException while sending packet to " + socket.getInetAddress() + ":" + socket.getPort());
+			Print.e("IOException while sending packet to " + toString());
 			e.printStackTrace();
 		}
 	}
 
 	public void setConnection(InetAddress adress, short port)
 	{
-		try
-		{
-			socket = new DatagramSocket(port, adress);
-		} catch (SocketException e)
-		{
-			Print.e("SocketException while creating socket " + adress.getHostAddress() + ":" + port);
-			e.printStackTrace();
-		}
+		this.adress = adress;
+		this.port = port;
 	}
 	
 	public void setConnection(String ip, short port)
 	{
 		try
 		{
-			socket = new DatagramSocket(port, InetAddress.getByName(ip));
+			this.adress = InetAddress.getByName(ip);
+			this.port = port; 
 		} catch (UnknownHostException e)
 		{
 			Print.e("UnknownHostException while parsing adress " + ip);
 			e.printStackTrace();
-		} catch (SocketException e)
-		{
-			e.printStackTrace();
 		}
-	}
-	
-	public void setConnection(DatagramSocket socket)
-	{
-		this.socket = socket;
 	}
 	
 	public int getPing()
@@ -91,17 +84,12 @@ public class Connection
 
 	public InetAddress getAddress()
 	{
-		return socket.getInetAddress();
+		return adress;
 	}
 
 	public short getPort()
 	{
-		return (short) socket.getPort();
-	}
-
-	public DatagramSocket getSocket()
-	{
-		return socket;
+		return port;
 	}
 	
 	public int getIncomingIndex()
@@ -114,6 +102,11 @@ public class Connection
 	{
 		outgoingIndex++;
 		return outgoingIndex;
+	}
+	
+	public DatagramSocket getSocket()
+	{
+		return socket;
 	}
 	
 	@Override

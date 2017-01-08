@@ -11,9 +11,9 @@ import com.github.jannled.lib.Print;
 public class PacketReciever implements Runnable
 {
 	private ConnectionManager connections;
-	private DatagramSocket reciever;
+	public DatagramSocket reciever;
 	
-	private boolean running;
+	private boolean running = true;
 	
 	public PacketReciever(ConnectionManager connections, short port)
 	{
@@ -43,8 +43,8 @@ public class PacketReciever implements Runnable
 				e.printStackTrace();
 				continue;
 			}
-			Packet packet = new Packet(connections.getConnection(datagramm.getAddress(), datagramm.getPort()), datagramm.getData());
-			Print.m("Packet: " + packet.getPacket().getAddress() + ": " + packet.getBytes());
+			Packet packet = new Packet(connections.getConnection(datagramm.getAddress(), datagramm.getPort()), datagramm);
+			Print.m("Packet: " + packet.getPacket().getAddress() + ": " + new String(packet.getBytes()));
 		}
 	}
 	
