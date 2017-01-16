@@ -2,12 +2,15 @@ package com.github.jannled.groupsession.packetdealer;
 
 import java.net.InetAddress;
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 import com.github.jannled.groupsession.Config;
 
 public class ConnectionManager
-{	
+{
 	private ArrayList<Connection> connections = new ArrayList<Connection>();
+	
+	private LinkedList<PacketListener> listener = new LinkedList<PacketListener>();
 	
 	PacketSender packetSender;
 	PacketReciever packetReciever;
@@ -26,11 +29,11 @@ public class ConnectionManager
 		connections.add(connection);
 	}
 	
-	public Connection getConnection(InetAddress adress, int port)
+	public Connection getConnection(InetAddress adress, short port)
 	{
 		for(Connection c : connections)
 		{
-			if(adress.getAddress().equals(c.getAddress()))
+			if(adress.equals(c.getAddress()) && port == c.getPort())
 			{
 				return c;
 			}
@@ -50,6 +53,19 @@ public class ConnectionManager
 		packetReciever = new PacketReciever(this, Config.recievePort);
 		packetRecieverThread = new Thread(packetReciever);
 		packetRecieverThread.start();
+	}
+	
+	public void registerPacketListener(PacketListener listener)
+	{
+		this.listener.add(listener);
+	}
+	
+	public void packetRecieved(Packet packet)
+	{
+		for(PacketListener l : listener)
+		{
+			l.recievePacket(packet);
+		}
 	}
 	
 	public void closeConnections()

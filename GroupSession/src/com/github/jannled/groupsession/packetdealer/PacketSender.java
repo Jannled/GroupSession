@@ -22,7 +22,7 @@ public class PacketSender implements Runnable
 	@Override
 	public void run()
 	{
-		ThreadUtils.freeze(3000);
+		ThreadUtils.freeze(30);
 		while(running)
 		{
 			if(!packetQue.isEmpty())

@@ -43,9 +43,15 @@ public class PacketReciever implements Runnable
 				e.printStackTrace();
 				continue;
 			}
-			Packet packet = new Packet(connections.getConnection(datagramm.getAddress(), datagramm.getPort()), datagramm);
-			Print.m("Packet: " + packet.getPacket().getAddress() + ": " + new String(packet.getBytes()));
+			Packet packet = new Packet(connections.getConnection(datagramm.getAddress(), (short) datagramm.getPort()), datagramm);
+			packetRecieved(packet);
 		}
+	}
+	
+	public void packetRecieved(Packet packet)
+	{
+		connections.packetRecieved(packet);
+		Print.m("Packet: " + packet.getPacket().getAddress() + ": " + new String(packet.getBytes()));
 	}
 	
 	public void stop()

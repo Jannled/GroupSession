@@ -4,6 +4,7 @@ import java.awt.EventQueue;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
+import com.github.jannled.groupsession.commandline.CommandInput;
 import com.github.jannled.groupsession.packetdealer.Connection;
 import com.github.jannled.groupsession.packetdealer.ConnectionManager;
 import com.github.jannled.groupsession.packetdealer.Packet;
@@ -11,14 +12,16 @@ import com.github.jannled.groupsession.window.Window;
 
 public class Main
 {
-	Main main;
+	public static Main main;
 	Window window;
+	CommandInput commands;
 	ConnectionManager connections;
 	
 	public Main()
 	{
 		main = this;
 		openWindow();
+		commands = new CommandInput();
 		connections = new ConnectionManager();
 		Connection c = null;
 		try
@@ -31,7 +34,7 @@ public class Main
 		}
 		connections.addConnection(c);
 		byte[] bytes = "Hallo Welt foo bar".getBytes();
-		Packet packet = new Packet(c, bytes, 131);
+		Packet packet = new Packet(c, bytes);
 		connections.getPacketSender().addPacket(packet);
 	}
 
@@ -64,5 +67,15 @@ public class Main
 		{
 			return true;
 		}
+	}
+	
+	public ConnectionManager getConnectionManager()
+	{
+		return connections;
+	}
+	
+	public CommandInput getCommands()
+	{
+		return commands;
 	}
 }

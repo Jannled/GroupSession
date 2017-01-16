@@ -34,11 +34,12 @@ public class Packet
 	 * @param data The data the packet should contain
 	 * @param index The index of the message, every message has its own index to enable the reciever to re request the packet
 	 */
-	public Packet(Connection connection, byte[] data, int index)
+	public Packet(Connection connection, byte[] data)
 	{
 		this.connection = connection;
 		this.packet = null;
 		this.data = data;
+		this.index = connection.getOutgoingIndex();
 		checksum = calculateChecksum(data);
 	}
 	
