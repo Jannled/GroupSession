@@ -29,7 +29,7 @@ public class User
 		try
 		{
 			this.icon = ImageIO.read(Main.class.getResourceAsStream(imagePath));
-		} catch (IOException | NullPointerException e)
+		} catch (IOException | NullPointerException | IllegalArgumentException e)
 		{
 			this.icon = new BufferedImage(64, 64, BufferedImage.TYPE_INT_RGB);
 			e.printStackTrace();

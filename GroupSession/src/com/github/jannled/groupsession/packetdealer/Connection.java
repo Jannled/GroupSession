@@ -44,6 +44,19 @@ public class Connection
 		}
 	}
 	
+	//TODO ONLY FOR TEST PURPOSE!
+	public Connection(String adress, short port)
+	{
+		try
+		{
+			socket = new DatagramSocket();
+			setConnection(adress, port);
+		} catch (SocketException e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
 	public void sendPacket(Packet packet)
 	{
 		DatagramPacket datagramm = new DatagramPacket(packet.getBytes(), packet.getBytes().length);
