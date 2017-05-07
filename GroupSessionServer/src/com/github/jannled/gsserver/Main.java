@@ -3,9 +3,6 @@ package com.github.jannled.gsserver;
 import java.io.File;
 import java.util.UUID;
 
-import com.github.jannled.groupsession.packetdealer.Connection;
-import com.github.jannled.groupsession.packetdealer.ConnectionManager;
-import com.github.jannled.groupsession.user.User;
 import com.github.jannled.gsserver.database.Database;
 import com.github.jannled.gsserver.database.UserDatabase;
 import com.github.jannled.lib.Print;
