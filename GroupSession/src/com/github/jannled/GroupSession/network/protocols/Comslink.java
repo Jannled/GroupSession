@@ -7,11 +7,13 @@ import java.net.SocketException;
 
 import com.github.jannled.GroupSession.network.Packet;
 import com.github.jannled.GroupSession.network.Protocol;
+import com.github.jannled.GroupSession.user.User;
 
 /**
  * @version 0.0.1
  * @author jannled
- * A communication protocol created by Jannled
+ * A communication protocol created by Jannled. <br>
+ * It uses the UDP Hole punching routiene.
  */
 public class Comslink extends Protocol 
 {
@@ -30,6 +32,12 @@ public class Comslink extends Protocol
 		{
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public void open(User user) 
+	{
+		
 	}
 	
 	@Override

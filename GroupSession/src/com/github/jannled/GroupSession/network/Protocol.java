@@ -2,6 +2,8 @@ package com.github.jannled.GroupSession.network;
 
 import java.util.LinkedList;
 
+import com.github.jannled.GroupSession.user.User;
+
 /**
  * @version 0.0.1
  * @author jannled
@@ -15,6 +17,10 @@ public abstract class Protocol
 	private boolean listenerRunning;
 	private String name;
 	
+	/**
+	 * Construct a new protocol.
+	 * @param name The name of the protocol
+	 */
 	public Protocol(String name)
 	{
 		this.name = name;
@@ -39,9 +45,18 @@ public abstract class Protocol
 				}
 			}
 		});
+		
+		listenerThread.setName(name);
 		listenerThread.start();
 	}
 	
+	/**
+	 * Opens a new connection. Some protocols wont need this, but others which use the UDP-Hole punching
+	 * need to establish a connection to the receiver before the first packet can be send.
+	 * @param user
+	 */
+	public abstract void open(User user);
+
 	/**
 	 * Send a packet to the specified user.
 	 * @param packet The Packet to send
@@ -83,5 +98,10 @@ public abstract class Protocol
 	public String getName()
 	{
 		return name;
+	}
+	
+	public void stop()
+	{
+		listenerRunning = false;
 	}
 }

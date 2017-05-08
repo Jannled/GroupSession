@@ -5,6 +5,7 @@ import java.net.UnknownHostException;
 import java.util.Arrays;
 
 import com.github.jannled.GroupSession.console.CommandManager;
+import com.github.jannled.GroupSession.gui.WindowManager;
 import com.github.jannled.GroupSession.network.Packet;
 import com.github.jannled.GroupSession.network.PacketListener;
 import com.github.jannled.GroupSession.network.protocols.Comslink;
@@ -21,12 +22,13 @@ public class Main implements PacketListener
 	//All Protocols
 	Comslink comslink = new Comslink();
 	
-	//
+	//TODO Debug remove!
 	User user;
 	
 	//All Managers
 	UserManager userManager;
 	CommandManager commandManager;
+	WindowManager windowManager;
 	
 	public Main()
 	{
