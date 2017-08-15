@@ -4,6 +4,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import com.github.jannled.GroupSession.Main;
+import javax.swing.JSplitPane;
+import java.awt.BorderLayout;
 
 public class WindowManager 
 {
@@ -17,6 +19,10 @@ public class WindowManager
 		this.main = main;
 		
 		window.getContentPane().add(pnlRoot);
+		pnlRoot.setLayout(new BorderLayout(0, 0));
+		
+		JSplitPane splitPane = new JSplitPane();
+		pnlRoot.add(splitPane);
 		window.setVisible(true);
 	}
 }
